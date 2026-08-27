@@ -15,7 +15,7 @@ export default function Navbar() {
 
   const links = [
     ['home', '#home'], ['about', '#about'], ['services', '#services'],
-    ['work', '#work'], ['prompts', '#prompts'], ['contact', '#contact'],
+    ['work', '#work'], ['promptStore', '#store'], ['insights', '#insights'], ['contact', '#contact'],
   ]
 
   return (
