@@ -1,6 +1,7 @@
 import React from 'react'
 import { useLanguage } from '../i18n.jsx'
 import { useReveal } from '../useReveal.js'
+import SectionHead from './SectionHead.jsx'
 
 const WORKS = [
   { img: 'photo-1677442136019-21780ecad995', cat: { ar: 'توليد صور', en: 'Image Gen' }, title: { ar: 'مشهد سريالي', en: 'Surreal Scene' } },
@@ -18,10 +19,7 @@ export default function Work() {
   return (
     <section className="section" id="work">
       <div className="container">
-        <div className="section-head reveal">
-          <span className="eyebrow">{t('work.title')}</span>
-          <h2 className="section-title gradient-text">{t('work.sub')}</h2>
-        </div>
+        <SectionHead eyebrow={t('work.title')} title={t('work.sub')} />
         <div className={`work-grid reveal ${shown ? 'in' : ''}`} ref={ref}>
           {WORKS.map((w, i) => (
             <div className="work-item" key={i}>

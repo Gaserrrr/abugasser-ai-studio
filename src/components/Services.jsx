@@ -1,6 +1,7 @@
 import React from 'react'
 import { useLanguage } from '../i18n.jsx'
 import { useReveal } from '../useReveal.js'
+import SectionHead from './SectionHead.jsx'
 
 const ICONS = ['🖼️', '🎯', '✍️', '📣', '🛠️', '🎓']
 
@@ -12,10 +13,7 @@ export default function Services() {
   return (
     <section className="section" id="services">
       <div className="container">
-        <div className="section-head reveal">
-          <span className="eyebrow">{t('services.title')}</span>
-          <h2 className="section-title gradient-text">{t('services.sub')}</h2>
-        </div>
+        <SectionHead eyebrow={t('services.title')} title={t('services.sub')} />
         <div className={`cards reveal ${shown ? 'in' : ''}`} ref={ref}>
           {items.map((it, i) => (
             <div className="card" key={i}>

@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useLanguage } from '../i18n.jsx'
 import { useReveal } from '../useReveal.js'
+import SectionHead from './SectionHead.jsx'
 
 const CATS = {
   ar: { img: 'صور', brand: 'هوية', video: 'فيديو', photo: 'تصوير', social: 'سوشيال', write: 'كتابة' },
@@ -24,6 +25,10 @@ export default function PromptStore() {
   const [query, setQuery] = useState('')
   const [cat, setCat] = useState('all')
   const [active, setActive] = useState(null)
+  const [copied, setCopied] = useState(false)
+  const copyTimer = useRef(null)
+
+  useEffect(() => () => clearTimeout(copyTimer.current), [])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -35,15 +40,22 @@ export default function PromptStore() {
     })
   }, [query, cat, lang])
 
-  const copy = (text) => navigator.clipboard?.writeText(text)
+  const copy = async (text) => {
+    if (!navigator.clipboard?.writeText) return
+    try {
+      await navigator.clipboard.writeText(text)
+    } catch {
+      return
+    }
+    setCopied(true)
+    clearTimeout(copyTimer.current)
+    copyTimer.current = setTimeout(() => setCopied(false), 2000)
+  }
 
   return (
     <section className="section" id="store">
       <div className="container">
-        <div className="section-head reveal">
-          <span className="eyebrow">{t('store.title')}</span>
-          <h2 className="section-title gradient-text">{t('store.sub')}</h2>
-        </div>
+        <SectionHead eyebrow={t('store.title')} title={t('store.sub')} />
 
         <div className={`store-controls reveal ${shown ? 'in' : ''}`} ref={ref}>
           <input
@@ -63,7 +75,7 @@ export default function PromptStore() {
 
         <div className="store-grid">
           {filtered.map((p, i) => (
-            <button key={i} className="store-card" onClick={() => setActive(p)}>
+            <button key={i} className="store-card" onClick={() => { setCopied(false); setActive(p) }}>
               <div className="store-card-top">
                 <span className={`pill ${p.premium ? 'premium' : 'free'}`}>{p.premium ? t('store.premium') : t('store.free')}</span>
                 <span className="cat-tag">{CATS[lang][p.cat]}</span>
@@ -92,7 +104,9 @@ export default function PromptStore() {
             <p className="modal-desc">{active.desc[lang]}</p>
             <div className="ptext">{active.prompt[lang]}</div>
             <div className="modal-tags">{t('store.tags')}: {active.tags.map((x) => `#${x}`).join(' ')}</div>
-            <button className="btn btn-primary" style={{ marginTop: 18 }} onClick={() => copy(active.prompt[lang])}>{t('store.copy')}</button>
+            <button className="btn btn-primary" style={{ marginTop: 18 }} onClick={() => copy(active.prompt[lang])}>
+              {copied ? t('store.copied') : t('store.copy')}
+            </button>
           </div>
         </div>
       )}

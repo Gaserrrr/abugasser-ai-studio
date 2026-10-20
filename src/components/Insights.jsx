@@ -1,6 +1,7 @@
 import React from 'react'
 import { useLanguage } from '../i18n.jsx'
 import { useReveal } from '../useReveal.js'
+import SectionHead from './SectionHead.jsx'
 
 const ARTICLES = [
   { id: 1, cat: { ar: 'برومبتات', en: 'Prompts' }, date: '2026-08-20', read: 4, title: { ar: 'كيف تكتب برومبت يُنتج نتائج دقيقة', en: 'How to write prompts that nail the result' }, excerpt: { ar: 'خمس تقنيات عملية لهندسة البرومبتات بدون إعادة المحاولة.', en: 'Five practical techniques for prompt engineering without retries.' } },
@@ -16,10 +17,7 @@ export default function Insights() {
   return (
     <section className="section" id="insights">
       <div className="container">
-        <div className="section-head reveal">
-          <span className="eyebrow">{t('insights.title')}</span>
-          <h2 className="section-title gradient-text">{t('insights.sub')}</h2>
-        </div>
+        <SectionHead eyebrow={t('insights.title')} title={t('insights.sub')} />
         <div className={`cards reveal ${shown ? 'in' : ''}`} ref={ref}>
           {ARTICLES.map((a) => (
             <article className="card ins-card" key={a.id}>
